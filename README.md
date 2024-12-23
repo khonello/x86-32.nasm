@@ -1,1 +1,1 @@
-# x86-32.nasm
+# Learning X86-32 NASM
