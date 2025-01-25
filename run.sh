@@ -26,7 +26,7 @@ else
                         if [[ $? -eq 0 ]]; then
 
                                 # ld -m elf_i386 -s -o "$without_ext" "$without_ext.o"
-                                gcc -m32 "$without_ext.o" -o "$without_ext"
+                                gcc -m32 "$without_ext.o" -o "$without_ext" 2> /dev/null
                                 echo "[√] Done"
 
                                 "./$without_ext"

@@ -9,7 +9,10 @@ section .text
 
 main:
     call div_func
+    add esp, 12
+
     call mul_func
+    add esp, 8
 
     mov eax, 1
     xor ebx, ebx
@@ -32,7 +35,6 @@ div_func:
     push d_frmt
 
     call printf
-    add esp, 12
 
     mov esp, ebp
     pop ebp
@@ -53,7 +55,6 @@ mul_func:
     push m_frmt
 
     call printf
-    add esp, 8
 
     mov esp, ebp
     pop ebp
