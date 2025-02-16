@@ -12,7 +12,9 @@ _start:
 
     push len
     push msg
+
     call func
+    add esp, 8
 
 func:
     push ebp
@@ -23,8 +25,6 @@ func:
     mov ecx, [ebp + 8]
     mov edx, [ebp + 12]
     int 0x80
-
-    add esp, 8
 
     mov eax, 1
     int 0x80
