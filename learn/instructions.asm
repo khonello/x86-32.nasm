@@ -24,7 +24,7 @@ main:
     ; call movement_func
     ; call arithmetic_func
     ; call logical_func
-    ; call flow_func
+    call flow_func
     jmp exit
 
 ; movement
@@ -135,15 +135,18 @@ logical_func:
 ; flow
 flow_func:
 
+    push ebp
+    mov ebp, esp
+
     jump_label:
         
-        ; unconditional_label:
-        ;     jmp conditional_label
+        unconditional_label:
+            jmp conditional_label
 
-        ; conditional_label:
+        conditional_label:
 
-        ;     xor al, al
-        ;     je exit                         ; same as jz
+            xor al, al
+            je exit                         ; same as jz
 
     loop_label:
 
@@ -159,7 +162,7 @@ flow_func:
 
         ;     loop default_label
 
-        ; jump_label:
+        ; .jump_label:
 
         ;     push ecx
         ;     push msg
@@ -169,7 +172,11 @@ flow_func:
         ;     pop ecx
 
         ;     dec ecx
-        ;     jne jump_label
+        ;     jne .jump_label
+
+    mov esp, ebp
+    pop ebp
+    ret
 
 exit:
     mov eax, 1
