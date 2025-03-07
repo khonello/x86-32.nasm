@@ -60,11 +60,6 @@
   * Direct Addressing
   * Indirect Addressing
   * Indexed Addressing
-* Segment
-  * Code Segment [ CS ]
-  * Data Segment  [ DS ]
-  * Extra Segment [ ES ]
-  * Extra Segments [ FS/GS ]
 * Operand Size
   * Explicit 
 * Condition Code

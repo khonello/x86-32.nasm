@@ -1,7 +1,7 @@
-section .data
+section .rodata
     
-    stack_msg db "argument is %d and local variable is %d", 0xA, 0x0
-    heap_msg db "old break is %p, value stored in the heap %u and new break is %p", 0xA, 0x0
+    stack_msg db "stack [ argument is %d and local variable is %d ]", 0xA, 0x0
+    heap_msg db "heap [ old break is %p, value stored in the heap %u and new break is %p ]", 0xA, 0x0
 
     error_msg db "error in heap allocation", 0xA, 0x0
 
@@ -25,10 +25,10 @@ memory_func:
     push ebp
     mov ebp, esp
 
-    ; push 5
-    ; call stack_func
+    push 5
+    call stack_func
     
-    ; add esp, 4                    ; clean up the stack after call
+    add esp, 4                    ; clean up the stack after call
 
     call heap_func
 
@@ -86,7 +86,7 @@ heap_func:
     push dword [old_brk]
     pop dword edi
 
-    mov byte [edi + 4], 255        ; write to the allocated memory
+    mov byte [edi + 4], 255         ; write to the allocated memory
 
     push dword [new_brk]
     push dword [edi + 4]
