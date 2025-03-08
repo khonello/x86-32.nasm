@@ -39,7 +39,7 @@ section .rodata
         msg db "Hello, World!", 0xA, 0x0
         msg_len equ $ - msg
 
-        array_frmt db "data is %d", 0xA, 0x0
+        array_frmt db "Data is %d", 0xA, 0x0
 
     .directive:
 
