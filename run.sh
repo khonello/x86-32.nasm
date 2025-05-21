@@ -38,7 +38,8 @@ else
                                                 echo -e "\e[38;2;255;0;0m[x] Linking failed. Can't link using gcc. Entry is _start\e[0m"
                                                 echo -e "\e[38;2;243;143;0m[√] Linking using ld\e[0m\n"
                                                 
-                                                ld -m elf_i386 -s -o "$without_ext" "$without_ext.o" 2> /dev/null
+                                                # ld -m elf_i386 -s -o "$without_ext" "$without_ext.o" 2> /dev/null
+                                                ld -m elf_i386 -s -o "$without_ext" "$without_ext.o"
                                         fi
                                         
                                         ./"$without_ext"

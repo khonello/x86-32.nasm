@@ -590,15 +590,20 @@ times 446 - ($ - $$) db nop ; NOP instruction
   ```
   assembly
 
-  ; Head: 8 Bits
-  ;     First Byte               ==>    8 bits
+  chs db 0x0, 0x0, 0x0
+  ```
 
-  ; Sector: 6 Bits  ( values 1-63 )
-  ;     Second Byte ( Bits 0-5 ) ==>    6 bits
+  ```
+  assembly
 
-  ; Cylinder: 10 Bits
-  ;     Second Byte ( Bits 6-7 ) ==>    2 bits ( high bits )
-  ;     Third Byte               ==>    8 bits ( low bits )
+  ; First Byte:
+  ;     Head                                  ==>    8 bits
+
+  ; Second Byte:
+  ;     Upper 2 Bits of Cylinder and Sector   ==>    2 Bits and 6 Bits
+
+  ; Third Byte:
+  ;     Lower 8 Bits of Cylinder              ==>    8 Bits
 
   ```
 
