@@ -38,7 +38,6 @@ else
                                                 echo -e "\e[38;2;255;0;0m[x] Linking failed. Can't link using gcc. Entry is _start\e[0m"
                                                 echo -e "\e[38;2;243;143;0m[√] Linking using ld\e[0m\n"
                                                 
-                                                # ld -m elf_i386 -s -o "$without_ext" "$without_ext.o" 2> /dev/null
                                                 ld -m elf_i386 -s -o "$without_ext" "$without_ext.o"
                                         fi
                                         
@@ -52,7 +51,21 @@ else
                                 fi
                         
                         else
-                                nasm -f bin "$basename" -o "$without_ext.bin"
+                                
+                                nasm -f bin "mbr.asm" -o "mbr.bin"
+
+                                # seek implies to move forward by bs * seek in output file before write
+                                # count implies bs * count to copy from `if` to `of`
+
+                                dd if=/dev/zero of=disk.img bs=512 count=2048
+
+                                dd if=mbr.bin of=disk.img bs=512 conv=notrunc count=1
+                                # dd if=vbr.bin of=disk.img bs=512 conv=notrunc seek=1 count=1
+                                # dd if=kernel.bin of=disk.img bs=512 conv=notrunc seek=2
+
+                                qemu-system-i386 -drive file=disk.img,format=raw,index=0,media=disk
+                                rm *.bin *.img 2> /dev/null
+
                         fi
 
                 else
