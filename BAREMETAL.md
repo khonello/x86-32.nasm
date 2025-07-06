@@ -550,7 +550,7 @@ print:
     mov ah, 0x0E         ; BIOS teletype function
     mov bh, 0x00         ; Video page
 
-    .loop
+    .loop:
         lodsb                ; Load byte at DS:SI into AL and increment SI
 
         test al, al          ; Check if character is null (string terminator)

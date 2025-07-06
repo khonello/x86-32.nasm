@@ -6,7 +6,39 @@ class CHS(NamedTuple):
     h: int
     s: int
 
-def calc_chs( lba_start: int ):
+def chs_lba( chs: CHS) -> int:
+    '''
+    Converts Cylinder-Head-Sector (CHS) to Logical Block Address (LBA).
+
+    CHS limits:
+        - C ∈ [0, 1023]
+        - H ∈ [0, 254]
+        - S ∈ [1, 63]  (note: Sector starts at 1)
+
+    Standard BIOS geometry:
+        - Heads per Cylinder: 255
+        - Sectors per Track: 63
+
+    Args:
+        c (int): Cylinder
+        h (int): Head
+        s (int): Sector
+
+    Returns:
+        int: Logical Block Address
+    '''
+
+    HPC = 255  # Heads per Cylinder
+    SPT = 63   # Sectors per Track
+
+    if chs.c > 1023 or chs.h > 254 or chs.s < 1 or chs.s > 63:
+        raise ValueError("CHS values out of valid range")
+
+    # Convert using LBA = (C * HPC + H) * SPT + (S - 1)
+    lba = ((chs.c * HPC + chs.h) * SPT) + (chs.s - 1)
+    return lba
+
+def lba_chs( lba_start: int ):
     '''
     CHS limits: C ≤ 1023, H ≤ 254, S ≤ 63 (S starts at 1). 
         These are the value ranges 
@@ -62,5 +94,5 @@ def shift_and_pack( chs: CHS ):
     
     return (byte1, byte2, byte3)
 
-packed_chs = shift_and_pack(calc_chs( 0x00300008 ))
+packed_chs = shift_and_pack(lba_chs( 0x00300008 ))
 print(f"Packed CHS values: {packed_chs}")

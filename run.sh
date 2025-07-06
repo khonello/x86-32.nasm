@@ -10,7 +10,7 @@ else
         filepath=$(find . -type f -name "$filename")
 
         if [[ ! -e "$filepath" ]]; then
-                echo -e "\e[38;2;255;0;0m[x] File '$1' does not exist\e[0m"
+                echo -e "\e[38;2;255;0;0m[x] File '$filename' does not exist\e[0m"
                 exit 1
         else
                 if [[ "$filepath" =~ .+[.]asm$ ]]; then
@@ -52,19 +52,26 @@ else
                         
                         else
                                 
-                                nasm -f bin "mbr.asm" -o "mbr.bin"
+                                mbr_file=$(find /mnt/c/Users/Khonello/Documents/Developer/Languages/Assembly/baremetal/realmode/src -type f -iname "mbr.asm")
+                                vbr_file=$(find /mnt/c/Users/Khonello/Documents/Developer/Languages/Assembly/baremetal/realmode/src -type f -iname "fat12.asm")
+                                src_dirpath=$(dirname "$mbr_file")
+
+                                nasm -f bin "$mbr_file" -o "${mbr_file%.asm}.bin"
+                                nasm -f bin "$vbr_file" -o "${vbr_file%.asm}.bin"
 
                                 # seek implies to move forward by bs * seek in output file before write
                                 # count implies bs * count to copy from `if` to `of`
 
-                                dd if=/dev/zero of=disk.img bs=512 count=2048
+                                dd if=/dev/zero of=${src_dirpath}/disk.img bs=512 count=2048
 
-                                dd if=mbr.bin of=disk.img bs=512 conv=notrunc count=1
+                                dd if="${mbr_file%.asm}.bin" of="${src_dirpath}/disk.img" bs=512 conv=notrunc count=1
+                                dd if="${vbr_file%.asm}.bin" of="${src_dirpath}/disk.img" bs=512 conv=notrunc count=1 seek=1
+
                                 # dd if=vbr.bin of=disk.img bs=512 conv=notrunc seek=1 count=1
                                 # dd if=kernel.bin of=disk.img bs=512 conv=notrunc seek=2
 
-                                qemu-system-i386 -drive file=disk.img,format=raw,index=0,media=disk
-                                rm *.bin *.img 2> /dev/null
+                                qemu-system-i386 -drive file="${src_dirpath}/disk.img",format=raw,index=0,media=disk
+                                find "$src_dirpath" -type f \( -iname "*.bin" -o -iname "*.img" \) -exec rm -f {} +
 
                         fi
 
